@@ -1,0 +1,137 @@
+using System;
+
+namespace ConsoleApp6
+{
+    class Program
+    {
+
+        static void Main(string[] args)
+        {
+ 
+            const char TENGER_JEL = '*';
+            const char SZIGET_JEL = 'O';
+            const char HAJO_JEL = '█';
+            /*
+            char[,] tenger = new char[SOROK_SZAMA, OSZLOPOK_SZAMA];
+            */
+            //todo Itt majd be kell kérni a játékostól a pálya méretét - Ezt Zoli intézi majd
+            const int SOROK_SZAMA = 20;
+            const int OSZLOPOK_SZAMA = 60;
+            char[,] tenger = new char[SOROK_SZAMA, OSZLOPOK_SZAMA];
+
+            for (int sorIndex = 0; sorIndex < tenger.GetLength(0); sorIndex++)
+            {
+                for (int oszlopIndex = 0; oszlopIndex < tenger.GetLength(1); oszlopIndex++)
+                {
+                    tenger[sorIndex, oszlopIndex] = TENGER_JEL;
+                }
+            }
+            Random vel = new Random();
+            for (int i = 0; i < 20; i++)
+            {
+                tenger[vel.Next(tenger.GetLength(0)), vel.Next(tenger.GetLength(1))] = SZIGET_JEL;
+            }
+            Megjelenit(tenger);
+
+            //1) Hány sziget van a tengeren?
+
+            int szamlal = Szamlalo(tenger);
+            Console.WriteLine($"A  tengeren {szamlal} db sziget található");
+
+            //2) Hány sziget van a tenger szélén?
+            int hatarSzele = Hatar(tenger);
+            Console.WriteLine($"A tenger szélén {hatarSzele} db sziget található");
+            //3) Van-e olyan sziget, ami mellett közvetlenül másik sziget is van?
+
+            bool egymas = EgymasMellett(tenger);
+            Console.WriteLine(egymas);
+        }
+        
+        static void Megjelenit(char[,] terkep)
+        {
+            Console.Clear();
+            for (int sorIndex = 0; sorIndex < terkep.GetLength(0); sorIndex++)
+            {
+                for (int oszlopIndex = 0; oszlopIndex < terkep.GetLength(1); oszlopIndex++)
+                {
+                    Console.Write(terkep[sorIndex, oszlopIndex]);
+                }
+                Console.WriteLine();
+            }
+
+        }
+        static int Szamlalo(char[,] terkep)
+        {
+
+            int count = 0;
+            for (int sorIndex = 0; sorIndex < terkep.GetLength(0); sorIndex++)
+            {
+                for (int oszlopIndex = 0; oszlopIndex < terkep.GetLength(1); oszlopIndex++)
+                {
+                    if (terkep[sorIndex, oszlopIndex] == 'O')
+                    {
+                        count++;
+                    }
+                }
+
+            }
+            return count;
+        }
+        static bool EgymasMellett(char[,] tenger)
+        {
+            const char SZIGET_JEL = 'O';
+           
+            const int SOROK_SZAMA = 20;
+            const int OSZLOPOK_SZAMA = 60;
+            bool EgymasMellett = false;
+            for (int sorIndex = 0; sorIndex < tenger.GetLength(0); sorIndex++)
+            {
+                for (int oszlopIndex = 0; oszlopIndex < tenger.GetLength(1); oszlopIndex++)
+                {
+                    if (tenger[sorIndex,oszlopIndex] == SZIGET_JEL)
+                    {
+                        if (sorIndex == 0 || oszlopIndex == 0 || sorIndex == SOROK_SZAMA - 1 || oszlopIndex == OSZLOPOK_SZAMA - 1)
+                        {
+                            continue;
+                        }
+                        if (tenger[sorIndex - 1, oszlopIndex] == SZIGET_JEL || tenger[sorIndex, oszlopIndex - 1] == SZIGET_JEL || tenger[sorIndex + 1, oszlopIndex] == SZIGET_JEL || tenger[sorIndex, oszlopIndex + 1] == SZIGET_JEL)
+                        {
+                            EgymasMellett = true;
+
+                        }
+
+
+                    }
+
+                }
+               
+            }
+
+            return EgymasMellett;
+        }
+        static int Hatar(char[,] terkep)
+        {
+            const char SZIGET_JEL = 'O';
+            int borderSzele = 0;
+            const int SOROK_SZAMA = 20;
+            const int OSZLOPOK_SZAMA = 60;
+            for (int sorIndex = 0; sorIndex < terkep.GetLength(0); sorIndex++)
+            {
+                for (int oszlopIndex = 0; oszlopIndex < terkep.GetLength(1); oszlopIndex++)
+
+                    if (terkep[sorIndex, oszlopIndex] == SZIGET_JEL)
+                    {
+                        if (sorIndex == 0 || oszlopIndex == 0 || sorIndex == SOROK_SZAMA - 1 || oszlopIndex == OSZLOPOK_SZAMA - 1)
+                        {
+                            borderSzele++;
+                        }
+                    }
+                   
+             }
+            return borderSzele;
+
+        }
+ 
+        }
+    
+}
